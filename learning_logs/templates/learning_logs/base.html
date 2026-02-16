@@ -1,0 +1,102 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- FIXED meta viewport (wrong commas and attributes before) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Learning Log</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+
+    <!-- FIX 1: Navbar was closing early -->
+    <!-- FIX 2: bg-light needs navbar-light not navbar-dark -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+
+        <a class="navbar-brand" href="{% url 'learning_logs:index' %}">
+            Learning Logs
+        </a>
+
+        <!-- FIX 3: Bootstrap 5 uses data-bs-toggle instead of data-toggle -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+
+            <!-- FIX 4: mr-auto/ml-auto replaced in Bootstrap 5 -->
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'learning_logs:topics'%}">
+                        Topics
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <span class="navbar-text">
+                            Hello, {{ user.username }}.
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <form action="{% url 'users:logout' %}" method="post">
+                            {% csrf_token %}
+                        - <button type="submit">Logout</button>
+                        </form>
+                        
+                    </li>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}">
+                            Register
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">
+                            Log in
+                        </a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+
+        <div class="pb-2 mb-2 border-bottom">
+            {% block page_header %}{% endblock page_header %}
+        </div>
+
+        <div>
+            {% block content %}{% endblock content %}
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends 'learning_logs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<div class="container">
+
+    <p>
+        <a href="{% url 'learning_logs:topic' topic.id %}" 
+           class="btn btn-outline-secondary mb-3">
+            {{ topic }}
+        </a>
+    </p>
+
+    <h4>Edit Entry:</h4>
+
+    <form action="{% url 'learning_logs:edit_entry' entry.id %}" 
+          method="post" 
+          class="form">
+
+        {% csrf_token %}
+
+        {% bootstrap_form form %}
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock content %}
